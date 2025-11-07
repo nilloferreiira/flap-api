@@ -65,9 +65,11 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DeleteUserRequest $request)
+    public function destroy($id)
     {
-        $user = User::find($request->id);
+        //TODO autorizacao
+
+        $user = User::find($id);
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }

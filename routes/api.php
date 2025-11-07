@@ -23,9 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Authentication
 Route::post('/auth/sign-up', [AuthController::class, 'signUp']);
 Route::post('/auth/sign-in', [AuthController::class, 'signIn']);
-Route::post('logout', [AuthController::class, 'logout']);
-Route::post('refresh', [AuthController::class, 'refresh']);
-Route::post('me', [AuthController::class, 'me']);
+Route::get('/auth/sign-out', [AuthController::class, 'signOut']);
+Route::post('/auth/refresh', [AuthController::class, 'refresh']);
+Route::post('/auth/me', [AuthController::class, 'me']);
 
 
 // Private routes
