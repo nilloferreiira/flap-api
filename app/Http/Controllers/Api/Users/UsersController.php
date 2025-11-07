@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\DeleteUserRequest;
+use App\Http\Requests\Users\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Nette\NotImplementedException;
 
 class UsersController extends Controller
 {
@@ -18,16 +18,6 @@ class UsersController extends Controller
     {
         $users = User::paginate(10);
         return response()->json($users);
-    }
-
-    public function create()
-    {
-        abort(501, 'Not implemented');
-    }
-
-    public function store()
-    {
-        abort(501, 'Not implemented');
     }
 
     /**
@@ -47,28 +37,13 @@ class UsersController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-        return response()->json($user);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\Users\UpdateUserRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
         $user = User::find($id);
         if (!$user) {
@@ -90,9 +65,9 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DeleteUserRequest $request)
     {
-        $user = User::find($id);
+        $user = User::find($request->id);
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
