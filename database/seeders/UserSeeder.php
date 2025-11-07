@@ -19,10 +19,10 @@ class UserSeeder extends Seeder
         $adminRole = Role::where('slug', 'admin')->first();
 
         User::firstOrCreate(
-            ['email' => 'admin@flap.com.br'],
+            ['email' => env('ADMIN_SEEDER_EMAIL')],
             [
                 'name' => 'Administrador',
-                'password' => bcrypt('Admin@123'),
+                'password' => env('ADMIN_SEEDER_PWD'),
                 'role_id' => $adminRole ? $adminRole->id : null,
             ]
         );

@@ -24,7 +24,7 @@ class AuthController extends Controller
         $accessToken = JWTAuth::attempt($credentials);
         //TODO lidar com o token expirado
         if (!$accessToken) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => 'Invalid credentials'], 404);
         }
 
         return $this->respondWithToken($accessToken);
@@ -81,6 +81,6 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => 60 * 60 * 24 // 1 day
-        ]);
+        ], 200);
     }
 }
