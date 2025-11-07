@@ -1,0 +1,11 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "array_indentation": true,
+        "array_syntax": {
+            "syntax": "short"
+        },
+        "no_multiline_empty_body": true,
+        "trailing_comma_in_multiline_array": true
+    }
+}
