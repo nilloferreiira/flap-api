@@ -17,9 +17,24 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $roles = [
-            ['slug' => 'admin', 'name' => 'Admin', 'is_system_role' => true],
-            ['slug' => 'gerente_de_projetos', 'name' => 'Gerente de Projetos', 'is_system_role' => false],
-            ['slug' => 'usuario', 'name' => 'Usuário', 'is_system_role' => false],
+            [
+                'slug' => 'admin',
+                'name' => 'Admin',
+                'description' => 'Administrador do sistema, acesso total.',
+                'is_system_role' => true
+            ],
+            [
+                'slug' => 'gerente_de_projetos',
+                'name' => 'Gerente de Projetos',
+                'description' => 'Gerencia projetos e clientes, acesso intermediário.',
+                'is_system_role' => false
+            ],
+            [
+                'slug' => 'usuario',
+                'name' => 'Usuário',
+                'description' => 'Usuário padrão, acesso restrito.',
+                'is_system_role' => false
+            ],
         ];
 
         foreach ($roles as $roleData) {
