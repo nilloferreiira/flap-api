@@ -63,7 +63,13 @@ class RolesController extends Controller
 
         $data = $request->validated();
 
+        $permissions = $data['permissions'] ?? [];
+        unset($data['permissions']);
+
         $role->update($data);
+
+        $role->permissions()->sync($permissions);
+
         return response()->json(['message' => 'Role updated successfully', 'role' => $role], 200);
     }
 
