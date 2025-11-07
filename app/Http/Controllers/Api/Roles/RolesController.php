@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Role\CreateRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
+use App\Models\Permission\Permission;
 use App\Models\Role\Role;
 use Illuminate\Support\Str;
 
@@ -15,6 +16,17 @@ class RolesController extends Controller
     {
         $roles = Role::paginate(10);
         return response()->json($roles);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return response()->json(Role::findOrFail($id));
     }
 
     // Cria um novo papel
@@ -67,5 +79,12 @@ class RolesController extends Controller
         $role->delete();
 
         return response()->json(['message' => 'Role deleted successfully'], 200);
+    }
+
+    public function getAllPermissions()
+    {
+        $permissions = Permission::all();
+
+        return response()->json($permissions);
     }
 }

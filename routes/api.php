@@ -33,6 +33,8 @@ Route::post('/auth/me', [AuthController::class, 'me']);
 Route::middleware('auth:api')->group(function () {
     // Users
     Route::resource('/users', UsersController::class);
+    // Permissions
+    Route::get('/roles/permissions', [RolesController::class, 'getAllPermissions']);
     // Roles
     Route::resource('/roles', RolesController::class);
 });
