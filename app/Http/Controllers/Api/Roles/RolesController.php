@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Api\Roles;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Role\CreateRoleRequest;
-use App\Http\Requests\Role\DeleteRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
-use Illuminate\Http\Request;
+use App\Models\Role\Role;
 
 class RolesController extends Controller
 {

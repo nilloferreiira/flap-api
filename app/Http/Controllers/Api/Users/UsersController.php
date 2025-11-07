@@ -50,6 +50,15 @@ class UsersController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
+        $email = $request->input('email');
+
+        if ($email !== $user->email) {
+            $existingUser = User::where('email', $email)->first();
+            if ($existingUser) {
+                return response()->json(['message' => 'Este e-mail já está em uso por outro usuário.'], 422);
+            }
+        }
+
         //TODO roles
         $data = $request->only(['name', 'email', 'password']);
         // Remove campos vazios para não sobrescrever com null
