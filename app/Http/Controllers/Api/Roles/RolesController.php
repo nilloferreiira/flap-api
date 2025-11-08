@@ -7,13 +7,20 @@ use App\Http\Requests\Role\CreateRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
 use App\Models\Permission\Permission;
 use App\Models\Role\Role;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class RolesController extends Controller
 {
     // Lista todos os papéis
-    public function index()
+    public function index(Request $request)
     {
+        $user = $request->user();
+
+        if (!$user->hasPermission('view_role')) {
+            return response()->json(['message' => 'Você não tem permissão para visualizar os cargos'], 403);
+        }
+
         $roles = Role::paginate(10);
         return response()->json($roles);
     }
@@ -29,9 +36,16 @@ class RolesController extends Controller
         return response()->json(Role::findOrFail($id));
     }
 
-    // Cria um novo papel
+    // Cria um novo cargo
     public function store(CreateRoleRequest $request)
     {
+
+        $user = $request->user();
+
+        if (!$user->hasPPermission('create_role')) {
+            return response()->json(['message' => 'Você não tem permissão para criar cargos'], 403);
+        }
+
         $data = $request->validated();
 
         $data['slug'] = Str::slug($data['name']);
@@ -53,6 +67,12 @@ class RolesController extends Controller
     // Atualiza um papel existente
     public function update(UpdateRoleRequest $request, $id)
     {
+        $user = $request->user();
+
+        if (!$user->hasPPermission('update_role')) {
+            return response()->json(['message' => 'Você não tem permissão para atualizar cargos'], 403);
+        }
+
         $role = Role::findOrFail($id);
 
         if ($role->is_system_role) {
@@ -72,9 +92,13 @@ class RolesController extends Controller
     }
 
     // Exclui (soft delete) um papel
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //TODO autorizacao
+        $user = $request->user();
+
+        if (!$user->hasPPermission('delete_role')) {
+            return response()->json(['message' => 'Você não tem permissão para excluir cargos'], 403);
+        }
         $role = Role::findOrFail($id);
 
         if ($role->is_system_role) {

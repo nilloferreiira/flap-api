@@ -59,6 +59,14 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Role::class);
     }
 
+    public function hasPermission($permissionSlug)
+    {
+        if ($this->role && $this->role->permissions) {
+            return $this->role->permissions->contains('slug', $permissionSlug);
+        }
+        return false;
+    }
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);

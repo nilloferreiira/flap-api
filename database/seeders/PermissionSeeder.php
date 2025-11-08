@@ -35,6 +35,12 @@ class PermissionSeeder extends Seeder
             ['slug' => 'create_client',   'label' => 'Criar clientes'],
             ['slug' => 'edit_client',     'label' => 'Editar clientes'],
             ['slug' => 'delete_client',   'label' => 'Excluir clientes'],
+
+            // Permissões de cargos
+            ['slug' => 'view_role',       'label' => 'Visualizar papéis'],
+            ['slug' => 'create_role',     'label' => 'Criar papéis'],
+            ['slug' => 'edit_role',       'label' => 'Editar papéis'],
+            ['slug' => 'delete_role',     'label' => 'Excluir papéis'],
         ];
 
         foreach ($permissions as $perm) {
