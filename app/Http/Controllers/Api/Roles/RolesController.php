@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers\Api\Roles;
 
-use App\Constants\Permissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Role\CreateRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
 use App\Models\Permission\Permission;
-use App\Models\Role\Role;
+use App\Services\Roles\RolesService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class RolesController extends Controller
 {
+
+    protected RolesService $rolesService;
+
+    public function __construct(RolesService $rolesService)
+    {
+        $this->rolesService = $rolesService;
+    }
+
     // Lista todos os papéis
     public function index(Request $request)
     {
         $user = $request->user();
-
-        if (!$user->hasPermission(Permissions::VIEW_ROLE)) {
-            return response()->json(['message' => 'Você não tem permissão para visualizar os cargos'], 403);
-        }
-
-        $roles = Role::paginate(10);
-        return response()->json($roles);
+        return $this->rolesService->listRoles($user);
     }
 
     /**
@@ -32,9 +32,11 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return response()->json(Role::findOrFail($id));
+        $user = $request->user();
+
+        return $this->rolesService->getRoleById($user, $id);
     }
 
     // Cria um novo cargo
@@ -43,26 +45,9 @@ class RolesController extends Controller
 
         $user = $request->user();
 
-        if (!$user->hasPermission(Permissions::CREATE_ROLE)) {
-            return response()->json(['message' => 'Você não tem permissão para criar cargos'], 403);
-        }
-
         $data = $request->validated();
 
-        $data['slug'] = Str::slug($data['name']);
-
-        $permissions = $data['permissions'] ?? [];
-        unset($data['permissions']);
-        $role = Role::create([
-            'name' => $data['name'],
-            'slug' => $data['slug'],
-            'is_system_role' => false,
-            'description' => $data['description'] ?? null,
-        ]);
-
-        $role->permissions()->sync($permissions);
-
-        return response()->json(['message' => 'Role created successfully', 'role' => $role], 201);
+        return $this->rolesService->createRole($user, $data);
     }
 
     // Atualiza um papel existente
@@ -70,29 +55,9 @@ class RolesController extends Controller
     {
         $user = $request->user();
 
-        if (!$user->hasPermission(Permissions::EDIT_ROLE)) {
-            return response()->json(['message' => 'Você não tem permissão para atualizar cargos'], 403);
-        }
-
-        $role = Role::findOrFail($id);
-
-        if ($role->is_system_role) {
-            return response()->json(['message' => 'System roles cannot be updated'], 403);
-        }
-
         $data = $request->validated();
 
-        $permissions = $data['permissions'] ?? [];
-        unset($data['permissions']);
-
-        $role->update([
-            'name' => $data['name'],
-            'description' => $data['description'] ?? null,
-        ]);
-
-        $role->permissions()->sync($permissions);
-
-        return response()->json(['message' => 'Role updated successfully', 'role' => $role], 200);
+        return $this->rolesService->updateRole($user, $id, $data);
     }
 
     // Exclui (soft delete) um papel
@@ -100,17 +65,7 @@ class RolesController extends Controller
     {
         $user = $request->user();
 
-        if (!$user->hasPermission(Permissions::DELETE_ROLE)) {
-            return response()->json(['message' => 'Você não tem permissão para excluir cargos'], 403);
-        }
-        $role = Role::findOrFail($id);
-
-        if ($role->is_system_role) {
-            return response()->json(['message' => 'System roles cannot be deleted'], 403);
-        }
-        $role->delete();
-
-        return response()->json(['message' => 'Role deleted successfully'], 200);
+        return $this->rolesService->deleteRole($user, $id);
     }
 
     public function getAllPermissions()
