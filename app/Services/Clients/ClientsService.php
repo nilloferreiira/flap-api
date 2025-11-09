@@ -3,7 +3,7 @@
 namespace App\Services\Clients;
 
 use App\Constants\Permissions;
-use App\Models\Client;
+use App\Models\Client\Client;
 use App\Models\User;
 use App\Traits\CheckPermission;
 use Illuminate\Http\JsonResponse;
@@ -57,7 +57,6 @@ class ClientsService
         if ($permission = $this->checkPermission($user, Permissions::CREATE_CLIENT)) return $permission;
 
         $client = Client::create([
-            'id' => $data['id'],
             'companyName' => $data['companyName'],
             'cnpj' => $data['cnpj'],
             'address' => $data['address'],

@@ -9,4 +9,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Client extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $table = 'clients';
+
+    protected $fillable = [
+        'id',
+        'companyName',
+        'cnpj',
+        'address',
+        'primaryContact',
+        'phone',
+        'email',
+        'avatarUrl',
+        'agentUrl',
+    ];
 }

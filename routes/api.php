@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Clients\ClientsController;
 use App\Http\Controllers\Api\Roles\RolesController;
 use App\Http\Controllers\Api\Users\UsersController;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ Route::middleware('auth:api')->group(function () {
     // Roles
     Route::resource('/roles', RolesController::class);
     // Clients
-
+    Route::resource('clients', ClientsController::class);
     // Boards
 
     // Tasks | Cards | Jobs
