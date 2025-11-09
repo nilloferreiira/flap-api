@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Clients;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Clients\CreateClientRequest;
+use App\Http\Requests\Clients\UpdateClientRequest;
 use App\Services\Clients\ClientsService;
 use Illuminate\Http\Request;
 
@@ -35,18 +37,18 @@ class ClientsController extends Controller
     }
 
     // Cria um novo cliente
-    public function store(Request $request)
+    public function store(CreateClientRequest $request)
     {
         $user = $request->user();
-        $data = $request->all();
+        $data = $request->validated();
         return $this->clientsService->createClient($user, $data);
     }
 
     // Atualiza um cliente existente
-    public function update(Request $request, $id)
+    public function update(UpdateClientRequest $request, $id)
     {
         $user = $request->user();
-        $data = $request->all();
+        $data = $request->validated();
         return $this->clientsService->updateClient($user, $id, $data);
     }
 

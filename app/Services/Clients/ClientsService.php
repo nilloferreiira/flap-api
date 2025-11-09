@@ -87,6 +87,20 @@ class ClientsService
             return response()->json(['message' => 'Cliente não encontrado'], 404);
         }
 
+        if (isset($data['email']) && $data['email'] !== $client->email) {
+            $existingClientEmail = Client::where('email', $data['email'])->first();
+            if ($existingClientEmail) {
+                return response()->json(['message' => 'Este e-mail já está em uso por outro cliente.'], 422);
+            }
+        }
+
+        if (isset($data['cnpj']) && $data['cnpj'] !== $client->cnpj) {
+            $existingClientCnpj = Client::where('cnpj', $data['cnpj'])->first();
+            if ($existingClientCnpj) {
+                return response()->json(['message' => 'Este CNPJ já está em uso por outro cliente.'], 422);
+            }
+        }
+
         $client->update([
             'companyName' => $data['companyName'] ?? $client->companyName,
             'cnpj' => $data['cnpj'] ?? $client->cnpj,
