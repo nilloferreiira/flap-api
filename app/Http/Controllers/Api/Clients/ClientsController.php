@@ -21,7 +21,7 @@ class ClientsController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        return $this->clientsService->listClients($user);
+        return $this->clientsService->getAll($user);
     }
 
     /**
@@ -33,7 +33,7 @@ class ClientsController extends Controller
     public function show(Request $request, $id)
     {
         $user = $request->user();
-        return $this->clientsService->getClientById($user, $id);
+        return $this->clientsService->getById($user, $id);
     }
 
     // Cria um novo cliente
@@ -41,7 +41,7 @@ class ClientsController extends Controller
     {
         $user = $request->user();
         $data = $request->validated();
-        return $this->clientsService->createClient($user, $data);
+        return $this->clientsService->create($user, $data);
     }
 
     // Atualiza um cliente existente
@@ -49,13 +49,13 @@ class ClientsController extends Controller
     {
         $user = $request->user();
         $data = $request->validated();
-        return $this->clientsService->updateClient($user, $id, $data);
+        return $this->clientsService->update($user, $id, $data);
     }
 
     // Exclui (soft delete) um cliente
     public function destroy(Request $request, $id)
     {
         $user = $request->user();
-        return $this->clientsService->deleteClient($user, $id);
+        return $this->clientsService->delete($user, $id);
     }
 }

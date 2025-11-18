@@ -19,7 +19,7 @@ class RolesService
      * @param  User $user
      * @return JsonResponse
      */
-    public function listRoles(User $user)
+    public function getAll(User $user)
     {
         if ($permission = $this->checkPermission($user, Permissions::VIEW_ROLE)) return $permission;
 
@@ -34,7 +34,7 @@ class RolesService
      * @param  int $id
      * @return Role|null
      */
-    public function getRoleById(User $user, $id)
+    public function getById(User $user, $id)
     {
         if ($permission = $this->checkPermission($user, Permissions::VIEW_ROLE)) return $permission;
 
@@ -54,7 +54,7 @@ class RolesService
      * @param  array $data
      * @return Role
      */
-    public function createRole(User $user, $data)
+    public function create(User $user, $data)
     {
         if ($permission = $this->checkPermission($user, Permissions::CREATE_ROLE)) return $permission;
 
@@ -82,7 +82,7 @@ class RolesService
      * @param  array $data
      * @return Role
      */
-    public function updateRole(User $user, $id, $data)
+    public function update(User $user, $id, $data)
     {
         if ($permission = $this->checkPermission($user, Permissions::EDIT_ROLE)) return $permission;
 
@@ -108,7 +108,7 @@ class RolesService
      * @param  int $id
      * @return bool
      */
-    public function deleteRole(User $user, $id)
+    public function delete(User $user, $id)
     {
         if ($permission = $this->checkPermission($user, Permissions::DELETE_ROLE)) return $permission;
 

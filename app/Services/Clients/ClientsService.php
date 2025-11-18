@@ -18,7 +18,7 @@ class ClientsService
      * @param User $user
      * @return JsonResponse
      */
-    public function listClients(User $user)
+    public function getAll(User $user)
     {
         if ($permission = $this->checkPermission($user, Permissions::VIEW_CLIENT)) return $permission;
 
@@ -33,7 +33,7 @@ class ClientsService
      * @param string $id
      * @return JsonResponse
      */
-    public function getClientById(User $user, $id)
+    public function getById(User $user, $id)
     {
         if ($permission = $this->checkPermission($user, Permissions::VIEW_CLIENT)) return $permission;
 
@@ -52,7 +52,7 @@ class ClientsService
      * @param array $data
      * @return JsonResponse
      */
-    public function createClient(User $user, array $data)
+    public function create(User $user, array $data)
     {
         if ($permission = $this->checkPermission($user, Permissions::CREATE_CLIENT)) return $permission;
 
@@ -78,7 +78,7 @@ class ClientsService
      * @param array $data
      * @return JsonResponse
      */
-    public function updateClient(User $user, $id, array $data)
+    public function update(User $user, $id, array $data)
     {
         if ($permission = $this->checkPermission($user, Permissions::EDIT_CLIENT)) return $permission;
 
@@ -122,7 +122,7 @@ class ClientsService
      * @param string $id
      * @return JsonResponse
      */
-    public function deleteClient(User $user, $id)
+    public function delete(User $user, $id)
     {
         if ($permission = $this->checkPermission($user, Permissions::DELETE_CLIENT)) return $permission;
 

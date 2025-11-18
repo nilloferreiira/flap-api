@@ -23,7 +23,7 @@ class RolesController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        return $this->rolesService->listRoles($user);
+        return $this->rolesService->getAll($user);
     }
 
     /**
@@ -36,7 +36,7 @@ class RolesController extends Controller
     {
         $user = $request->user();
 
-        return $this->rolesService->getRoleById($user, $id);
+        return $this->rolesService->getById($user, $id);
     }
 
     // Cria um novo cargo
@@ -47,7 +47,7 @@ class RolesController extends Controller
 
         $data = $request->validated();
 
-        return $this->rolesService->createRole($user, $data);
+        return $this->rolesService->create($user, $data);
     }
 
     // Atualiza um papel existente
@@ -57,7 +57,7 @@ class RolesController extends Controller
 
         $data = $request->validated();
 
-        return $this->rolesService->updateRole($user, $id, $data);
+        return $this->rolesService->update($user, $id, $data);
     }
 
     // Exclui (soft delete) um papel
@@ -65,7 +65,7 @@ class RolesController extends Controller
     {
         $user = $request->user();
 
-        return $this->rolesService->deleteRole($user, $id);
+        return $this->rolesService->delete($user, $id);
     }
 
     public function getAllPermissions()

@@ -5,11 +5,19 @@ namespace App\Http\Controllers\Api\Users;
 use App\Constants\Permissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\UpdateUserRequest;
-use App\Models\User;
+use App\Services\Users\UsersService;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
+
+    protected UsersService $usersService;
+
+    public function __construct(UsersService $usersService)
+    {
+        $this->usersService = $usersService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,8 +31,7 @@ class UsersController extends Controller
             return response()->json(['message' => 'Você não tem permissão para visualizar usuários'], 403);
         }
 
-        $users = User::paginate(10);
-        return response()->json($users);
+        return $this->usersService->getAll($authenticatedUser);
     }
 
     /**
@@ -41,12 +48,7 @@ class UsersController extends Controller
             return response()->json(['message' => 'Você não tem permissão para visualizar usuários'], 403);
         }
 
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        return response()->json($user);
+        return $this->usersService->getById($authenticatedUser, $id);
     }
 
     /**
@@ -64,27 +66,8 @@ class UsersController extends Controller
             return response()->json(['message' => 'Você não tem permissão para atualizar usuários'], 403);
         }
 
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        $email = $request->input('email');
-
-        if ($email !== $user->email) {
-            $existingUser = User::where('email', $email)->first();
-            if ($existingUser) {
-                return response()->json(['message' => 'Este e-mail já está em uso por outro usuário.'], 422);
-            }
-        }
-
         $data = $request->only(['name', 'email', 'password', 'role_id']);
-        // Remove campos vazios para não sobrescrever com null
-        $data = array_filter($data, fn($v) => $v !== null && $v !== '');
-
-        $user->update($data);
-
-        return response()->json(['message' => 'User updated successfully', 'user' => $user], 200);
+        return $this->usersService->update($authenticatedUser, $id, $data);
     }
 
     /**
@@ -101,11 +84,6 @@ class UsersController extends Controller
             return response()->json(['message' => 'Você não tem permissão para excluir usuários'], 403);
         }
 
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-        $user->delete(); // Soft delete
-        return response()->json(['message' => 'User deleted (soft) successfully', 204]);
+        return $this->usersService->delete($authenticatedUser, $id);
     }
 }

@@ -17,7 +17,7 @@ class UsersService
      * @param User $user
      * @return JsonResponse
      */
-    public function listUsers(User $user)
+    public function getAll(User $user)
     {
         if ($permission = $this->checkPermission($user, Permissions::VIEW_USER)) return $permission;
 
@@ -32,7 +32,7 @@ class UsersService
      * @param int $id
      * @return JsonResponse
      */
-    public function getUserById(User $user, $id)
+    public function getById(User $user, $id)
     {
         if ($permission = $this->checkPermission($user, Permissions::VIEW_USER)) return $permission;
 
@@ -52,7 +52,7 @@ class UsersService
      * @param array $data
      * @return JsonResponse
      */
-    public function updateUser(User $user, $id, array $data)
+    public function update(User $user, $id, array $data)
     {
         if ($permission = $this->checkPermission($user, Permissions::EDIT_USER)) return $permission;
 
@@ -83,7 +83,7 @@ class UsersService
      * @param int $id
      * @return JsonResponse
      */
-    public function deleteUser(User $user, $id)
+    public function delete(User $user, $id)
     {
         if ($permission = $this->checkPermission($user, Permissions::DELETE_USER)) return $permission;
 
