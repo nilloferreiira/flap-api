@@ -39,7 +39,7 @@ class UpdateRoleRequest extends FormRequest
     {
         throw new \Illuminate\Http\Exceptions\HttpResponseException(
             response()->json([
-                'message' => 'Erro de validação',
+                'message' => 'Erro de validação. ' . $validator->errors()->first(),
                 'errors' => $validator->errors()
             ], 422)
         );

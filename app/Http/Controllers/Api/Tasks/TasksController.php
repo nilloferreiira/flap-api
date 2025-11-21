@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Tasks;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Task\CreateTaskRequest;
+use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Services\Tasks\TasksService;
 use Illuminate\Http\Request;
 
@@ -20,7 +22,7 @@ class TasksController extends Controller
         return response()->json($this->tasksService->getAll($request->user()));
     }
 
-    public function store(Request $request)
+    public function store(CreateTaskRequest $request)
     {
         return $this->tasksService->create($request->user(), $request->all());
     }
@@ -30,7 +32,7 @@ class TasksController extends Controller
         return $this->tasksService->getById($request->user(), $id);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateTaskRequest $request, $id)
     {
         return $this->tasksService->update($request->user(), $id, $request->all());
     }
