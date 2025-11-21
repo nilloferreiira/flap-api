@@ -36,16 +36,8 @@ class TasksService
     {
         if ($permission = $this->checkPermission($user, Permissions::CREATE_JOB)) return $permission;
 
-        $task = Task::create([
-            'list_id' => $data['list_id'],
-            'client_id' => $data['client_id'],
-            'title' => $data['title'],
-            'start_date' => $data['start_date'] ?? null,
-            'end_date' => $data['end_date'] ?? null,
-            'description' => $data['description'] ?? null,
-            'position' => $data['position'],
-        ]);
-
+        $task = Task::create($data);
+        $task->refresh();
         return response()->json(['message' => 'Tarefa criada com sucesso', 'tarefa' => $task], 201);
     }
 
@@ -67,7 +59,7 @@ class TasksService
             'description' => $data['description'] ?? $task->description,
             'position' => $data['position'] ?? $task->position,
         ]);
-
+        $task->refresh();
         return response()->json(['message' => 'Tarefa atualizada com sucesso', 'tarefa' => $task], 200);
     }
 
