@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Clients\ClientsController;
 use App\Http\Controllers\Api\Lists\ListsController;
 use App\Http\Controllers\Api\Roles\RolesController;
+use App\Http\Controllers\Api\Tasks\TasksController;
 use App\Http\Controllers\Api\Users\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,5 +44,6 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('clients', ClientsController::class);
     // Lists
     Route::resource('lists', ListsController::class);
-    // Tasks | Cards | Jobs
+    // Tasks 
+    Route::resource('tasks', TasksController::class);
 });
