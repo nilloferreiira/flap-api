@@ -36,6 +36,9 @@ class TasksService
     {
         if ($permission = $this->checkPermission($user, Permissions::CREATE_JOB)) return $permission;
 
+        $lastPosition = Task::max('position') ?? 0;
+        $data['position'] = $lastPosition + 1;
+
         $task = Task::create($data);
         $task->refresh();
         return response()->json(['message' => 'Tarefa criada com sucesso', 'tarefa' => $task], 201);

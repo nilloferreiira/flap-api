@@ -21,6 +21,6 @@ class ListModel extends Model
 
     public function tasks()
     {
-        return $this->hasMany(Task::class, 'list_id')->orderBy('position', 'desc');
+        return $this->hasMany(Task::class, 'list_id')->orderBy('position', 'asc');
     }
 }
