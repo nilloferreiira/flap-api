@@ -46,4 +46,5 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('lists', ListsController::class);
     // Tasks 
     Route::resource('tasks', TasksController::class);
+    Route::put('tasks/{id}/move', [TasksController::class, 'moveTask']);
 });

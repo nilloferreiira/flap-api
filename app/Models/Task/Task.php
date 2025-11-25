@@ -33,4 +33,14 @@ class Task extends Model
     {
         return $this->belongsTo(Client::class, 'client_id');
     }
+
+    static public function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($task) {
+            $maxPosition = Task::where('list_id', $task->list_id)->max('position') ?? 0;
+            $task->position = $maxPosition + 1;
+        });
+    }
 }
