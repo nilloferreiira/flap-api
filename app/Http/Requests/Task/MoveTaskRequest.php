@@ -20,7 +20,7 @@ class MoveTaskRequest extends FormRequest
     {
         return [
             'listId' => 'required|integer|exists:lists,id',
-            'position' => 'required|integer|min:1',
+            'position' => 'required|integer|min:0',
         ];
     }
 
@@ -40,7 +40,7 @@ class MoveTaskRequest extends FormRequest
     {
         throw new HttpResponseException(
             response()->json([
-                'message' => 'Erro de validação',
+                'message' => 'Erro de validação' . $validator->errors()->first(),
                 'errors' => $validator->errors()
             ], 422)
         );

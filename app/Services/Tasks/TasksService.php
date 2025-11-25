@@ -116,7 +116,7 @@ class TasksService
         $this->updatePositionsWithinList($task, $newPosition);
 
         // Update positions in the new list
-        if ($newPosition == $task->position) return;
+        if ($newPosition == $task->position) return response()->json(['message' => 'Ja esta na msm lista'], 200);
 
         if ($newPosition < $task->position) {
             Task::query()
