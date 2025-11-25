@@ -15,7 +15,7 @@ class TasksService
     {
         if ($permission = $this->checkPermission($user, Permissions::VIEW_JOB)) return $permission;
 
-        $tasks = Task::paginate(20);
+        $tasks = Task::orderBy('position')->get();
         return response()->json($tasks);
     }
 

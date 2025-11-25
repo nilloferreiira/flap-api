@@ -20,6 +20,8 @@ class Task extends Model
         'end_date',
         'description',
         'position',
+        'priority',
+        'status',
     ];
 
     public function list()
