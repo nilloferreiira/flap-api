@@ -124,12 +124,12 @@ class TasksService
 
     public function updatePositionsWithinList(Task $task, $newPosition)
     {
-        if ($newPosition < $task->position) {
+        if ($task->position > $newPosition) {
             Task::query()
                 ->where('list_id', $task->list_id)
                 ->whereBetween('position', [$newPosition, $task->position - 1])
                 ->increment('position');
-        } else if ($newPosition > $task->position) {
+        } else if ($task->position < $newPosition) {
             Task::query()
                 ->where('list_id', $task->list_id)
                 ->whereBetween('position', [$task->position + 1, $newPosition])
