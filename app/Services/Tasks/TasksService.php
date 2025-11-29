@@ -63,6 +63,8 @@ class TasksService
             'end_date' => $data['end_date'] ?? $task->end_date,
             'description' => $data['description'] ?? $task->description,
             'position' => $data['position'] ?? $task->position,
+            'priority' => $data['priority'] ?? $task->priority,
+            'status' => $data['status'] ?? $task->status,
         ]);
         $task->refresh();
         return response()->json(['message' => 'Tarefa atualizada com sucesso', 'task' => $task], 200);
