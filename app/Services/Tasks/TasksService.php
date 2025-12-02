@@ -90,7 +90,7 @@ class TasksService
     public function moveTask(User $user, $id, $listId, $position)
     {
         //TODO permissao de mover task
-        if ($permission = $this->checkPermission($user, Permissions::EDIT_JOB)) return $permission;
+        if ($permission = $this->checkPermission($user, Permissions::MOVE_JOB)) return $permission;
 
         $task = Task::find($id);
         if (!$task) {
@@ -112,13 +112,15 @@ class TasksService
 
         // dd($task, $listId, $position);
 
-        DB::transaction(function () use ($task, $listId, $position) {
+        DB::transaction(function () use ($task, $listId, $position, $user) {
             // Update positions of other tasks in the target list
             if ($task->list_id == $listId) {
                 $this->updatePositionsWithinList($task, $position);
                 $task->position = $position;
                 $task->save();
             } else {
+                if ($permission = $this->checkPermission($user, Permissions::MOVE_JOBS_BETWEEN_LISTS)) return $permission;
+
                 $this->updatePositionsBetweenLists($task, $listId, $position);
                 $task->list_id = $listId;
                 $task->position = $position;
