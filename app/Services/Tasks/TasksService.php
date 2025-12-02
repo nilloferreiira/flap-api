@@ -344,8 +344,9 @@ class TasksService
     {
         if ($permission = $this->checkPermission($user, Permissions::EDIT_MEMBERS)) return $permission;
 
-        $membership = TaskMember::find($id);
-        if (! $membership || $membership->task_id != $taskId) return response()->json(['message' => 'Membro não encontrado'], 404);
+        $membership = TaskMember::where('task_id', $taskId)->where('user_id', $id)->first();
+
+        if (!$membership || $membership->task_id != $taskId) return response()->json(['message' => 'Membro não encontrado'], 404);
 
         $membership->delete();
         return response()->json(['message' => 'Membro removido com sucesso'], 204);
