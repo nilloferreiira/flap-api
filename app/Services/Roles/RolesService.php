@@ -92,6 +92,10 @@ class RolesService
             return response()->json(['message' => 'Cargo não encontrado'], 404);
         }
 
+        if ($role->is_system_role) {
+            return response()->json(['message' => 'Cargos de sistema não podem ser editados'], 403);
+        }
+
         $permissions = $data['permissions'] ?? [];
         unset($data['permissions']);
 

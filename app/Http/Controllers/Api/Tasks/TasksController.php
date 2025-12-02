@@ -100,11 +100,6 @@ class TasksController extends Controller
         return $this->tasksService->createMember($request->user(), $taskId, $request->all());
     }
 
-    public function updateMember(Request $request, $taskId, $id)
-    {
-        return $this->tasksService->updateMember($request->user(), $taskId, $id, $request->all());
-    }
-
     public function deleteMember(Request $request, $taskId, $id)
     {
         return $this->tasksService->deleteMember($request->user(), $taskId, $id);

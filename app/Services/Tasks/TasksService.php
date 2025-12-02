@@ -74,6 +74,19 @@ class TasksService
         return response()->json(['message' => 'Tarefa atualizada com sucesso', 'task' => $task], 200);
     }
 
+    public function delete(User $user, $id)
+    {
+        if ($permission = $this->checkPermission($user, Permissions::DELETE_JOB)) return $permission;
+
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json(['message' => 'Tarefa não encontrada'], 404);
+        }
+        $task->delete();
+
+        return response()->json(['message' => 'Tarefa excluída com sucesso'], 204);
+    }
+
     public function moveTask(User $user, $id, $listId, $position)
     {
         //TODO permissao de mover task
@@ -159,20 +172,9 @@ class TasksService
         // dd($tasks);
     }
 
-    public function delete(User $user, $id)
-    {
-        if ($permission = $this->checkPermission($user, Permissions::DELETE_JOB)) return $permission;
+    // ---------- Task elements
 
-        $task = Task::find($id);
-        if (!$task) {
-            return response()->json(['message' => 'Tarefa não encontrada'], 404);
-        }
-        $task->delete();
-
-        return response()->json(['message' => 'Tarefa excluída com sucesso'], 204);
-    }
-
-    // ---------- Task elements: Comments
+    // Comments
     public function createComment(User $user, $taskId, $data)
     {
         if ($permission = $this->checkPermission($user, Permissions::EDIT_JOB)) return $permission;
@@ -326,25 +328,6 @@ class TasksService
         $membership = TaskMember::addMember($task, $memberUser);
 
         return response()->json(['message' => 'Membro adicionado com sucesso', 'member' => $membership], 201);
-    }
-
-    public function updateMember(User $user, $taskId, $id, $data)
-    {
-        if ($permission = $this->checkPermission($user, Permissions::EDIT_JOB)) return $permission;
-
-        $membership = TaskMember::find($id);
-        if (! $membership || $membership->task_id != $taskId) return response()->json(['message' => 'Membro não encontrado'], 404);
-
-        $newUserId = $data['user_id'] ?? null;
-        if (! $newUserId) return response()->json(['message' => 'user_id é obrigatório'], 422);
-
-        $newUser = User::find($newUserId);
-        if (! $newUser) return response()->json(['message' => 'Usuário não encontrado'], 404);
-
-        $membership->user_id = $newUser->id;
-        $membership->save();
-
-        return response()->json(['message' => 'Membro atualizado com sucesso', 'member' => $membership], 200);
     }
 
     public function deleteMember(User $user, $taskId, $id)

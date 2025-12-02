@@ -16,6 +16,11 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $permissions = [
+            // Permissões de listas
+            ['slug' => 'create_list',     'label' => 'Criar listas'],
+            ['slug' => 'edit_list',       'label' => 'Editar listas'],
+            ['slug' => 'delete_list',     'label' => 'Excluir listas'],
+
             // Permissões gerais de jobs
             ['slug' => 'view_job',        'label' => 'Visualizar jobs'],
             ['slug' => 'create_job',      'label' => 'Criar jobs'],
@@ -23,23 +28,29 @@ class PermissionSeeder extends Seeder
             ['slug' => 'delete_job',      'label' => 'Excluir jobs'],
             ['slug' => 'move_job',        'label' => 'Mover jobs entre colunas'],
             ['slug' => 'archive_job',     'label' => 'Arquivar jobs'],
+            ['slug' => 'edit_members',    'label' => 'Editar membros'],
+            ['slug' => 'move_jobs_between_lists', 'label' => 'Mover jobs entre listas'],
+            ['slug' => 'comment_on_job',  'label' => 'Comentar em jobs'],
 
             // Permissões de usuários
             ['slug' => 'view_user',       'label' => 'Visualizar usuários'],
             ['slug' => 'create_user',     'label' => 'Criar usuários'],
             ['slug' => 'edit_user',       'label' => 'Editar usuários'],
+            ['slug' => 'archive_user',    'label' => 'Arquivar usuários'],
             ['slug' => 'delete_user',     'label' => 'Excluir usuários'],
 
             // Permissões de clientes
             ['slug' => 'view_client',     'label' => 'Visualizar clientes'],
             ['slug' => 'create_client',   'label' => 'Criar clientes'],
             ['slug' => 'edit_client',     'label' => 'Editar clientes'],
+            ['slug' => 'archive_client',  'label' => 'Arquivar clientes'],
             ['slug' => 'delete_client',   'label' => 'Excluir clientes'],
 
             // Permissões de cargos
             ['slug' => 'view_role',       'label' => 'Visualizar papéis'],
             ['slug' => 'create_role',     'label' => 'Criar papéis'],
             ['slug' => 'edit_role',       'label' => 'Editar papéis'],
+            ['slug' => 'archive_role',    'label' => 'Arquivar papéis'],
             ['slug' => 'delete_role',     'label' => 'Excluir papéis'],
         ];
 
