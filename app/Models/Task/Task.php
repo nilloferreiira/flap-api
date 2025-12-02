@@ -24,7 +24,11 @@ class Task extends Model
         'status',
     ];
 
-    public function list()
+    protected $with = [
+        'client',
+    ];
+
+    public function listModel()
     {
         return $this->belongsTo(ListModel::class, 'list_id');
     }
