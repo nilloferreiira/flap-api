@@ -1,66 +1,131 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Flap API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API para o sistema Flap — serviço backend para um quadro Kanban com usuários, cargos, clientes, listas (colunas) e jobs (cards), incluindo elementos de tarefa como comentários, links, membros e checklists.
 
-## About Laravel
+Este README resume como instalar, executar e desenvolver localmente, e traz um resumo das principais funcionalidades (baseado no manual do usuário).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Conteúdo rápido
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Visão geral do sistema
+- Requisitos
+- Instalação e execução (local / Docker)
+- Seeders importantes
+- Principais fluxos (Administrador e Usuário)
+- Desenvolvimento e testes
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Visão geral
 
-## Learning Laravel
+O Flap API expõe endpoints para gerenciar autenticação, usuários, cargos (roles), permissões, clientes, listas (kanban) e tarefas (jobs). Cada tarefa pode ter comentários, links, membros e checklists com itens.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+O projeto segue convenções Laravel e está organizado em pastas típicas (`app/Models`, `app/Http/Controllers`, `app/Services`, `database/migrations`, `database/seeders`, etc.).
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Requisitos
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP 8.x compatível com Laravel 8
+- Composer
+- Node.js + npm/yarn (para assets se necessário)
+- Banco de dados MySQL
+- Docker/Docker Compose
 
-## Laravel Sponsors
+## Instalação (ambiente local)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+1. Clone o repositório
 
-### Premium Partners
+   git clone <repo>
+   cd flap-api
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+2. Instale dependências PHP
 
-## Contributing
+   composer install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. Copie o arquivo de ambiente e gere a chave
 
-## Code of Conduct
+   cp .env.example .env
+   php artisan key:generate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. Configure o `.env` (DB, cache, mail, etc.)
 
-## Security Vulnerabilities
+5. Rode migrações e seeders importantes
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   php artisan migrate
+   php artisan db:seed --class=PermissionSeeder
 
-## License
+6. (Opcional) Instale dependências JS e rode assets
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   npm install
+   npm run dev
+
+7. Inicie o servidor local
+
+   php artisan serve
+
+Ou, usando Docker Compose (quando disponível no repositório):
+
+    docker compose up -d --build
+
+E ajuste as variáveis de ambiente para apontar para os serviços Docker (DB, redis, etc.).
+
+## Seeders importantes
+
+- `PermissionSeeder` — popula permissões do sistema (jobs, usuários, clientes, papéis, listas, etc.).
+
+Execute sempre após as migrações em um ambiente novo para garantir as permissões básicas.
+
+## Principais fluxos (resumo do manual do usuário)
+
+Visão Administrador
+
+- Gerenciar usuários: criar, editar, excluir.
+- Gerenciar cargos (roles) e permissões: definir permissões por cargo.
+- Gerenciar clientes.
+- Gerenciar listas do Kanban: criar/editar/excluir colunas.
+- Gerenciar jobs: criar/editar/excluir/mover/arquivar cards.
+
+Visão Usuário Comum
+
+- Visualizar o quadro Kanban e os detalhes dos jobs.
+- Mover jobs entre listas (se o cargo permitir).
+- Atualizar senha e perfil.
+
+Elementos de tarefa
+
+- Comentários: criar/editar/excluir comentários em um job.
+- Links: anexar URLs ao job.
+- Membros: adicionar/remover usuários ao job (task members).
+- Checklists: criar checklists com vários itens; é possível criar, atualizar e deletar itens. Observe que o projeto usa soft deletes — ver seção de comportamento abaixo.
+
+## Soft deletes e cascata
+
+Importante: o `ON DELETE CASCADE` no banco NÃO é acionado quando você usa soft deletes (Eloquent `SoftDeletes`).
+Por isso o código do projeto trata explicitamente a sincronização/remoção de itens relacionados (por exemplo checklists e seus itens) usando eventos (`deleting`, `restoring`) e/ou métodos de sincronização em transação (`syncItems`).
+
+Se você precisar remover itens fisicamente ao fazer `forceDelete`, há lógica para propagar `forceDelete` para os relacionamentos onde aplicável.
+
+## Desenvolvimento e testes
+
+- Rodar testes unitários / feature (se houver):
+
+  php artisan test
+
+- Uso do Tinker para inspeção rápida:
+
+  php artisan tinker
+
+  > > > \App\Models\Task\Task::first()->checklists
+
+- Dicas:
+  - O model `Task` expõe relações convenientes: `links`, `comments`, `checklists`, `taskMembers` e `members`.
+  - Ao atualizar checklists via API, o fluxo esperado é enviar a chave `items` (mesmo que vazia) para sincronizar itens — itens não enviados serão removidos (soft delete).
+
+## Contribuindo
+
+1. Crie uma branch a partir de `main` ou `develop` (conforme workflow): `git checkout -b feat/my-change`
+2. Faça commits pequenos e claros.
+3. Adicione testes para novas features/bugs.
+4. Abra um pull request descrevendo a mudança.
+
+## Mais informações
+
+- Rotas da API: ver `routes/api.php`.
+- Regras de validação: muitos endpoints usam FormRequests em `app/Http/Requests/Task/Elements`.
+- Serviços: lógica de negócio fica em `app/Services/Tasks/TasksService.php`.
