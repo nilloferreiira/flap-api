@@ -275,6 +275,39 @@ class TasksService
         return response()->json(['message' => 'Checklist excluído com sucesso'], 204);
     }
 
+    public function updateCheckListItem(User $user, $taskId, $checklistId, $itemId, $data)
+    {
+        if ($permission = $this->checkPermission($user, Permissions::EDIT_JOB)) return $permission;
+
+        $checklist = Checklist::where('id', $checklistId)->where('task_id', $taskId)->first();
+        if (! $checklist) return response()->json(['message' => 'Checklist não encontrado'], 404);
+
+        $item = $checklist->items()->where('id', $itemId)->first();
+        if (! $item) return response()->json(['message' => 'Item do checklist não encontrado'], 404);
+
+        $item->description = $data ?? $item->description;
+
+        $item->save();
+
+        return response()->json(['message' => 'Item do checklist atualizado com sucesso', 'item' => $item], 200);
+    }
+
+    public function markCheckListItemCompleted(User $user, $taskId, $checklistId, $itemId, $completed)
+    {
+        if ($permission = $this->checkPermission($user, Permissions::EDIT_JOB)) return $permission;
+
+        $checklist = Checklist::where('id', $checklistId)->where('task_id', $taskId)->first();
+        if (! $checklist) return response()->json(['message' => 'Checklist não encontrado'], 404);
+
+        try {
+            $checklist->markItemCompleted($itemId, $completed);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'Item do checklist não encontrado'], 404);
+        }
+
+        return response()->json(['message' => 'Item do checklist atualizado com sucesso'], 200);
+    }
+
     // ---------- Task elements: Links
     public function createLink(User $user, $taskId, $data)
     {

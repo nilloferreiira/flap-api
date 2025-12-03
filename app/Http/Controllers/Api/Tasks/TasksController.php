@@ -81,6 +81,43 @@ class TasksController extends Controller
         return $this->tasksService->deleteChecklist($request->user(), $taskId, $id);
     }
 
+    public function updateCheckListItem(Request $request, $taskId, $checklistId, $itemId)
+    {
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Erro de validação',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $data = $validator->validated();
+        $description = $data['description'];
+
+        return $this->tasksService->updateCheckListItem($request->user(), $taskId, $checklistId, $itemId, $description);
+    }
+
+    public function markChecklistItem(Request $request, $taskId, $checklistId, $itemId)
+    {
+        $validator = Validator::make($request->all(), [
+            'is_completed' => 'required|boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Erro de validação',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $data = $validator->validated();
+        $isCompleted = $data['is_completed'];
+        return $this->tasksService->markCheckListItemCompleted($request->user(), $taskId, $checklistId, $itemId, $isCompleted);
+    }
+
     // --- Task elements: links
     public function createLink(Request $request, $taskId)
     {
