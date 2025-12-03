@@ -19,6 +19,10 @@ class Checklist extends Model
         'title',
     ];
 
+    protected $with = [
+        'items'
+    ];
+
     public function task()
     {
         return $this->belongsTo(Task::class, 'task_id');
