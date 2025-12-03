@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api\Tasks;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\CreateTaskRequest;
+use App\Http\Requests\Task\Elements\CreateCheckListRequest;
+use App\Http\Requests\Task\Elements\UpdateCheckListRequest;
 use App\Http\Requests\Task\MoveTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Services\Tasks\TasksService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TasksController extends Controller
 {
@@ -63,14 +66,14 @@ class TasksController extends Controller
     }
 
     // --- Task elements: checklists
-    public function createChecklist(Request $request, $taskId)
+    public function createChecklist(CreateCheckListRequest $request, $taskId)
     {
-        return $this->tasksService->createChecklist($request->user(), $taskId, $request->all());
+        return $this->tasksService->createChecklist($request->user(), $taskId, $request->validated());
     }
 
-    public function updateChecklist(Request $request, $taskId, $id)
+    public function updateChecklist(UpdateCheckListRequest $request, $taskId, $id)
     {
-        return $this->tasksService->updateChecklist($request->user(), $taskId, $id, $request->all());
+        return $this->tasksService->updateChecklist($request->user(), $taskId, $id, $request->validated());
     }
 
     public function deleteChecklist(Request $request, $taskId, $id)

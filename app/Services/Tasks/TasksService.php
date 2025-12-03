@@ -241,6 +241,12 @@ class TasksService
             'title' => $title,
         ]);
 
+        $items = $data['items'] ?? [];
+
+        if (!empty($items)) {
+            $checklist->items()->createMany($items);
+        }
+
         return response()->json(['message' => 'Checklist criado com sucesso', 'checklist' => $checklist], 201);
     }
 
@@ -251,8 +257,9 @@ class TasksService
         $checklist = Checklist::where('id', $id)->where('task_id', $taskId)->first();
         if (! $checklist) return response()->json(['message' => 'Checklist não encontrado'], 404);
 
-        $checklist->title = $data['title'] ?? $checklist->title;
-        $checklist->save();
+        $checklist->update([
+            'title' => $data['title'] ?? $checklist->title,
+        ]);
 
         return response()->json(['message' => 'Checklist atualizado com sucesso', 'checklist' => $checklist], 200);
     }
