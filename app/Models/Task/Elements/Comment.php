@@ -21,7 +21,8 @@ class Comment extends Model
         'content',
     ];
 
-    protected $appends = ['author'];
+    protected $appends = ['author', 'author_role'];
+    protected $hidden = ['user'];
 
     public function task()
     {
@@ -50,5 +51,10 @@ class Comment extends Model
     public function getAuthorAttribute()
     {
         return $this->user ? $this->user->name : null;
+    }
+
+    public function getAuthorRoleAttribute()
+    {
+        return $this->user ? $this->user->role->name : null;
     }
 }
