@@ -95,6 +95,6 @@ class Task extends Model
      */
     public function members()
     {
-        return $this->belongsToMany(User::class, 'task_members', 'task_id', 'user_id');
+        return $this->belongsToMany(User::class, 'task_members', 'task_id', 'user_id')->where('task_members.deleted_at', null);
     }
 }
