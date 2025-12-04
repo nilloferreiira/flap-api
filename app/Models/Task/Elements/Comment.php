@@ -21,6 +21,8 @@ class Comment extends Model
         'content',
     ];
 
+    protected $appends = ['author'];
+
     public function task()
     {
         return $this->belongsTo(Task::class, 'task_id');
@@ -43,5 +45,10 @@ class Comment extends Model
             // aqui você pode emitir eventos, notificar, etc.
             return $comment;
         });
+    }
+
+    public function getAuthorAttribute()
+    {
+        return $this->user ? $this->user->name : null;
     }
 }
