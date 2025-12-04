@@ -42,6 +42,11 @@ class TasksController extends Controller
         return $this->tasksService->update($request->user(), $id, $request->all());
     }
 
+    public function destroy(Request $request, $id)
+    {
+        return $this->tasksService->delete($request->user(), $id);
+    }
+
     public function moveTask(MoveTaskRequest $request, $id)
     {
         $position = $request->input('position');
@@ -160,6 +165,11 @@ class TasksController extends Controller
     }
 
     // --- Task elements: members
+    public function getAvailableMembers(Request $request, $taskId)
+    {
+        return $this->tasksService->getAvailableMembers($request->user(), $taskId);
+    }
+
     public function createMember(Request $request, $taskId)
     {
         return $this->tasksService->createMember($request->user(), $taskId, $request->all());
@@ -168,10 +178,5 @@ class TasksController extends Controller
     public function deleteMember(Request $request, $taskId, $id)
     {
         return $this->tasksService->deleteMember($request->user(), $taskId, $id);
-    }
-
-    public function destroy(Request $request, $id)
-    {
-        return $this->tasksService->delete($request->user(), $id);
     }
 }

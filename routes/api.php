@@ -71,5 +71,6 @@ Route::middleware('auth:api')->group(function () {
         // members
         Route::post('members', [TasksController::class, 'createMember']);
         Route::delete('members/{id}', [TasksController::class, 'deleteMember']);
+        Route::get('available-members/', [TasksController::class, 'getAvailableMembers']);
     });
 });

@@ -399,6 +399,20 @@ class TasksService
     }
 
     // ---------- Task elements: Members
+    public function getAvailableMembers(User $user, $taskId)
+    {
+        if ($permission = $this->checkPermission($user, Permissions::EDIT_MEMBERS)) return $permission;
+
+        $task = Task::find($taskId);
+        if (!$task) return response()->json(['message' => 'Tarefa não encontrada'], 404);
+
+        $assignedUserIds = $task->members()->pluck('user_id')->toArray();
+
+        $availableUsers = User::whereNotIn('id', $assignedUserIds)->get();
+
+        return response()->json(['available_members' => $availableUsers], 200);
+    }
+
     public function createMember(User $user, $taskId, $data)
     {
         if ($permission = $this->checkPermission($user, Permissions::EDIT_MEMBERS)) return $permission;
