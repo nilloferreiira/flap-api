@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\UpdateUserRequest;
 use App\Services\Users\UsersService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
@@ -68,6 +69,26 @@ class UsersController extends Controller
 
         $data = $request->only(['name', 'email', 'password', 'role_id']);
         return $this->usersService->update($authenticatedUser, $id, $data);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $authenticatedUser = $request->user();
+
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Erro de validação',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $data = $validator->validated();
+        return $this->usersService->updateProfile($authenticatedUser, $data);
     }
 
     /**

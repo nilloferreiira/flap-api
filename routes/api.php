@@ -36,6 +36,7 @@ Route::get('/auth/me', [AuthController::class, 'me']);
 Route::middleware('auth:api')->group(function () {
     // Users
     Route::resource('/users', UsersController::class);
+    Route::patch('/users/profile', [UsersController::class, 'updateProfile']);
     // Permissions
     Route::get('/roles/permissions', [RolesController::class, 'getAllPermissions']);
     // Roles

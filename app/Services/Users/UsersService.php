@@ -6,6 +6,7 @@ use App\Constants\Permissions;
 use App\Models\User;
 use App\Traits\CheckPermission;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 
 class UsersService
 {
@@ -95,5 +96,17 @@ class UsersService
         $foundUser->delete();
 
         return response()->json(['message' => 'Usuário excluído com sucesso'], 204);
+    }
+
+    public function updateProfile(User $user, array $data)
+    {
+        if (!isset($data['current_password']) || !Hash::check($data['current_password'], $user->password)) {
+            return response()->json(['message' => 'Senha atual inválida'], 400);
+        }
+
+        unset($data['current_password']);
+        $user->update(['password' => $data['password']]);
+
+        return response()->json(['message' => 'Senha atualizada com sucesso', 'user' => $user], 200);
     }
 }
