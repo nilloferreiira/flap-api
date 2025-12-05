@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Users;
 use App\Constants\Permissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\UpdateUserRequest;
+use App\Models\User;
 use App\Services\Users\UsersService;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,17 @@ class UsersController extends Controller
         }
 
         return $this->usersService->getAll($authenticatedUser);
+    }
+
+    public function getAll(Request $request)
+    {
+        $authenticatedUser = $request->user();
+
+        if (!$authenticatedUser->hasPermission(Permissions::VIEW_USER)) {
+            return response()->json(['message' => 'Você não tem permissão para visualizar usuários'], 403);
+        }
+
+        return User::all();
     }
 
     /**

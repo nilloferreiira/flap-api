@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\Role\Role;
+use App\Models\Task\Elements\TaskMember;
+use App\Models\Task\Task;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -58,6 +60,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function tasks()
+    {
+        return $this->hasManyThrough(Task::class, TaskMember::class, 'user_id', 'id', 'id', 'task_id');
+    }
+
 
     public function hasPermission($permissionSlug)
     {

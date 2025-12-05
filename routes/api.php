@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Clients\ClientsController;
+use App\Http\Controllers\Api\Dashboard\DashboardController;
 use App\Http\Controllers\Api\Lists\ListsController;
 use App\Http\Controllers\Api\Roles\RolesController;
 use App\Http\Controllers\Api\Tasks\TasksController;
@@ -34,8 +35,13 @@ Route::get('/auth/me', [AuthController::class, 'me']);
 
 // Private routes
 Route::middleware('auth:api')->group(function () {
+    // Dashboard
+    Route::get('/dashboard/tasks-count-per-user', [DashboardController::class, 'tasksCountPerUser']);
+    Route::get('/dashboard/tasks-count-per-user-by-list', [DashboardController::class, 'tasksCountPerUserByList']);
+
     // Users
     Route::resource('/users', UsersController::class);
+    Route::get('users/all', [UsersController::class, 'getAll']);
     // Permissions
     Route::get('/roles/permissions', [RolesController::class, 'getAllPermissions']);
     // Roles
