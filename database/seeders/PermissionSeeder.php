@@ -22,14 +22,14 @@ class PermissionSeeder extends Seeder
             ['slug' => 'delete_list',     'label' => 'Excluir listas'],
 
             // Permissões gerais de jobs
-            ['slug' => 'view_job',        'label' => 'Visualizar jobs'],
-            ['slug' => 'create_job',      'label' => 'Criar jobs'],
-            ['slug' => 'edit_job',        'label' => 'Editar jobs'],
-            ['slug' => 'delete_job',      'label' => 'Excluir jobs'],
+            ['slug' => 'view_job',        'label' => 'Visualizar tarefas'],
+            ['slug' => 'create_job',      'label' => 'Criar tarefas'],
+            ['slug' => 'edit_job',        'label' => 'Editar tarefas'],
+            ['slug' => 'delete_job',      'label' => 'Excluir tarefas'],
             ['slug' => 'move_job',        'label' => 'Mover as tarefas'],
-            ['slug' => 'archive_job',     'label' => 'Arquivar jobs'],
-            ['slug' => 'edit_members',    'label' => 'Editar membros'],
-            ['slug' => 'comment_on_job',  'label' => 'Comentar em jobs'],
+            ['slug' => 'archive_job',     'label' => 'Arquivar tarefas'],
+            ['slug' => 'edit_members',    'label' => 'Editar membros das tarefas'],
+            ['slug' => 'comment_on_job',  'label' => 'Comentar em tarefas'],
 
             // Permissões de usuários
             ['slug' => 'view_user',       'label' => 'Visualizar usuários'],
