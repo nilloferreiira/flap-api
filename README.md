@@ -23,9 +23,10 @@ O projeto segue convenções Laravel e está organizado em pastas típicas (`app
 
 - PHP 8.x compatível com Laravel 8
 - Composer
-- Node.js + npm/yarn (para assets se necessário)
+- Node.js + npm
 - Banco de dados MySQL
-- Docker/Docker Compose
+
+Ou, via Docker Compose (recomendado):
 
 ## Instalação (ambiente local)
 
@@ -61,9 +62,23 @@ O projeto segue convenções Laravel e está organizado em pastas típicas (`app
 
 Ou, usando Docker Compose (quando disponível no repositório):
 
-    docker compose up -d --build
+# sobe os serviços em background e (re)constrói imagens
 
-E ajuste as variáveis de ambiente para apontar para os serviços Docker (DB, redis, etc.).
+docker compose up -d --build
+
+Depois que os serviços estiverem rodando, execute as migrations e os seeders dentro do container da aplicação. Exemplo:
+
+# execute as migrations + seed dentro do container (o nome do container pode variar)
+
+sudo docker exec -it flap-api-app-1 php artisan migrate --seed
+
+Notas importantes:
+
+- Ajuste `flap-api-app-1` para o nome real do container da aplicação — verifique com `docker compose ps`.
+- Se seu usuário pertence ao grupo `docker`, o `sudo` pode não ser necessário; use apenas `docker exec -it <container> ...`.
+- Aguarde o banco de dados estar pronto antes de rodar as migrations. Você pode acompanhar logs com `docker compose logs -f` ou checar o status com `docker compose ps`.
+- Se preferir rodar apenas as migrations sem seed: `php artisan migrate`.
+- Não esqueça de ajustar as variáveis de ambiente (`.env`) para apontar para os serviços Docker (DB, redis, etc.) se necessário.
 
 ## Seeders importantes
 
@@ -101,31 +116,8 @@ Por isso o código do projeto trata explicitamente a sincronização/remoção d
 
 Se você precisar remover itens fisicamente ao fazer `forceDelete`, há lógica para propagar `forceDelete` para os relacionamentos onde aplicável.
 
-## Desenvolvimento e testes
-
-- Rodar testes unitários / feature (se houver):
-
-  php artisan test
-
-- Uso do Tinker para inspeção rápida:
-
-  php artisan tinker
-
-  > > > \App\Models\Task\Task::first()->checklists
-
-- Dicas:
-  - O model `Task` expõe relações convenientes: `links`, `comments`, `checklists`, `taskMembers` e `members`.
-  - Ao atualizar checklists via API, o fluxo esperado é enviar a chave `items` (mesmo que vazia) para sincronizar itens — itens não enviados serão removidos (soft delete).
-
-## Contribuindo
-
-1. Crie uma branch a partir de `main` ou `develop` (conforme workflow): `git checkout -b feat/my-change`
-2. Faça commits pequenos e claros.
-3. Adicione testes para novas features/bugs.
-4. Abra um pull request descrevendo a mudança.
-
 ## Mais informações
 
 - Rotas da API: ver `routes/api.php`.
-- Regras de validação: muitos endpoints usam FormRequests em `app/Http/Requests/Task/Elements`.
-- Serviços: lógica de negócio fica em `app/Services/Tasks/TasksService.php`.
+- Regras de validação: muitos endpoints usam FormRequests em `app/Http/Requests`.
+- Serviços: lógica de negócio fica em `app/Services`.
