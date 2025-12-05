@@ -41,7 +41,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Users
     Route::resource('/users', UsersController::class);
-    Route::get('users/all', [UsersController::class, 'getAll']);
+    Route::get('/all-users', [UsersController::class, 'getAllUsers']);
     // Permissions
     Route::get('/roles/permissions', [RolesController::class, 'getAllPermissions']);
     // Roles

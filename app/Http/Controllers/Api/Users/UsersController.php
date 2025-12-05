@@ -35,7 +35,7 @@ class UsersController extends Controller
         return $this->usersService->getAll($authenticatedUser);
     }
 
-    public function getAll(Request $request)
+    public function getAllUsers(Request $request)
     {
         $authenticatedUser = $request->user();
 
@@ -43,7 +43,14 @@ class UsersController extends Controller
             return response()->json(['message' => 'Você não tem permissão para visualizar usuários'], 403);
         }
 
-        return User::all();
+        $search = $request->query('search');
+        if ($search) {
+            $users = User::where('name', 'like', "%{$search}%")->get();
+        } else {
+            $users = User::all();
+        }
+
+        return response()->json(["users" => $users]);
     }
 
     /**
